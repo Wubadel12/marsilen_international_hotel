@@ -47,13 +47,13 @@ export default function Header({ mode = 'public', onCartClick, onSignIn }) {
           </span>
           <div className="min-w-0 leading-tight">
             <p className="flex items-center gap-1.5 truncate text-sm font-bold tracking-tight">
-              <span className="truncate">{loc(HOTEL.name)}</span>
-              <span className="shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 dark:bg-amber-500/20 dark:text-amber-200">
+              <span className="hidden truncate min-[520px]:inline">{loc(HOTEL.name)}</span>
+              <span className="hidden shrink-0 rounded-md bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 min-[520px]:inline-flex dark:bg-amber-500/20 dark:text-amber-200">
                 {t('demo.label')}
               </span>
             </p>
           {mode === 'guest' && (guest || visitor) && (
-              <span className="mt-0.5 inline-flex max-w-full items-center gap-1 truncate rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">
+              <span className="mt-0.5 hidden max-w-full items-center gap-1 truncate rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800 min-[520px]:inline-flex dark:bg-amber-500/15 dark:text-amber-300">
                 <MapPin className="h-3 w-3 shrink-0" aria-hidden />
                 <span className="truncate">
                   {guest

@@ -114,7 +114,7 @@ export default function StaffDashboard() {
   const grid = `grid gap-4 md:grid-cols-2 ${isKitchen ? 'xl:grid-cols-3' : '2xl:grid-cols-3'}`;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <Header mode="staff" />
 
       <main id="main" tabIndex={-1} className="mx-auto max-w-7xl px-4 pb-12 pt-6 outline-none sm:px-6">

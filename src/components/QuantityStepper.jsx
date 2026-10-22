@@ -1,10 +1,11 @@
 import { Minus, Plus } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { MAX_ITEM_QUANTITY } from '../data/limits';
 
 export default function QuantityStepper({ qty, onChange, name, compact = false }) {
   const { t } = useApp();
   const size = compact ? 'h-9 w-9' : 'h-11 w-11';
-  const btn = `${size} grid place-items-center rounded-xl text-navy-900 transition active:scale-90 hover:bg-amber-100 dark:text-slate-100 dark:hover:bg-white/10`;
+  const btn = `${size} grid place-items-center rounded-xl text-navy-900 transition active:scale-90 hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:active:scale-100 dark:text-slate-100 dark:hover:bg-white/10`;
   return (
     <div
       role="group"
@@ -14,6 +15,7 @@ export default function QuantityStepper({ qty, onChange, name, compact = false }
       <button
         type="button"
         className={btn}
+        disabled={qty <= 0}
         onClick={() => onChange(qty - 1)}
         aria-label={t('common.decrease', { name })}
       >
@@ -25,6 +27,7 @@ export default function QuantityStepper({ qty, onChange, name, compact = false }
       <button
         type="button"
         className={btn}
+        disabled={qty >= MAX_ITEM_QUANTITY}
         onClick={() => onChange(qty + 1)}
         aria-label={t('common.increase', { name })}
       >

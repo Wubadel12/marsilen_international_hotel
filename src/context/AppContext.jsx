@@ -7,6 +7,7 @@ import { usePersistentState } from '../hooks/usePersistentState';
 import { MENU_ITEMS } from '../data/mock';
 import { DESKS_BY_ID } from '../data/accounts';
 import { calcTotals, convert, formatAmount } from '../data/pricing';
+import { MAX_ITEM_QUANTITY } from '../data/limits';
 import { seedOrders, seedRooms } from '../data/seed';
 
 // NOTE: AppProvider wraps AuthProvider (see App.jsx), so this file must not import AuthContext.
@@ -139,7 +140,7 @@ export function AppProvider({ children }) {
           const { [id]: _removed, ...rest } = c;
           return rest;
         }
-        return { ...c, [id]: { qty: Math.min(qty, 20), note: c[id]?.note || '' } };
+        return { ...c, [id]: { qty: Math.min(qty, MAX_ITEM_QUANTITY), note: c[id]?.note || '' } };
       }),
     [setCart],
   );

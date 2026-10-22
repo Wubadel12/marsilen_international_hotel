@@ -41,7 +41,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <Header mode="staff" />
       <main id="main" tabIndex={-1} className="mx-auto max-w-7xl px-4 pb-12 pt-6 outline-none sm:px-6">
         <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight sm:text-3xl print:hidden">

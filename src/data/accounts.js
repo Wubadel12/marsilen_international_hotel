@@ -48,7 +48,7 @@ export function seedStaff() {
 
 const DAY = 24 * 3600 * 1000;
 
-// A "stay" is one guest's booking. The guest signs in with room + last name + PIN
+// A "stay" is one guest's booking. The guest signs in with room + first name + PIN
 // while status is 'in-house'; checking out disables sign-in immediately.
 export function seedStays() {
   const stay = (room, firstName, lastName, pin, daysAgo, nights) => ({

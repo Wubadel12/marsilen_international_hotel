@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BedDouble, Bell, Search, ShoppingBag, Store, TriangleAlert, UtensilsCrossed, X,
 } from 'lucide-react';
@@ -13,7 +14,6 @@ import CategoryTabs from '../components/CategoryTabs';
 import MenuCard from '../components/MenuCard';
 import ServiceRequests from '../components/ServiceRequests';
 import CartDrawer from '../components/CartDrawer';
-import GuestLogin from './GuestLogin';
 import { DemoNotice, SourceBadge, inputCls } from '../components/ui';
 
 const FOOD_CATEGORIES = CATEGORIES.filter((c) => c.id !== 'all' && c.id !== 'amenities');
@@ -60,7 +60,7 @@ function ContextBar({ onRequests, onSignIn }) {
             ))}
           </ul>
         </div>
-        <button type="button" onClick={onRequests} className="btn-ghost">
+        <button type="button" onClick={onRequests} className="btn-ghost w-full basis-full sm:ml-auto sm:w-auto sm:basis-auto">
           <Bell className="h-4 w-4" aria-hidden />
           {requests}
         </button>
@@ -83,6 +83,8 @@ function ContextBar({ onRequests, onSignIn }) {
 export default function MenuPage() {
   const { t, loc, menuItems, cart, setQty, cartCount, subtotalEtb, money, customerContext } = useApp();
   const { guest, visitor } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const desk = useDesk();
   const channel = customerContext.mode === 'room' ? 'room' : desk ? deskChannel(desk.id) : 'restaurant';
   usePageTitle(customerContext.mode === 'table' ? `${t('menu.menuAt')} ${desk ? loc(desk.name) : t('ctx.restaurant')}` : `${t('menu.title')} - ${t('header.room', { room: guest?.room ?? customerContext.room })}`);
@@ -91,7 +93,7 @@ export default function MenuPage() {
   const [query, setQuery] = useState('');
   const [diet, setDiet] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [signInOpen, setSignInOpen] = useState(false);
+  const openGuestLogin = () => navigate({ pathname: '/login', search: location.search });
 
   // Only items the admin offers on this menu (room service, restaurant, or this venue).
   const offered = useMemo(() => menuItems.filter((i) => offeredAt(i, channel)), [menuItems, channel]);
@@ -132,8 +134,8 @@ export default function MenuPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      <Header mode="guest" onCartClick={() => setCartOpen(true)} onSignIn={() => setSignInOpen(true)} />
+    <div className="min-h-dvh">
+      <Header mode="guest" onCartClick={() => setCartOpen(true)} onSignIn={openGuestLogin} />
 
       <main id="main" tabIndex={-1} className="mx-auto max-w-7xl px-4 pb-32 pt-5 outline-none sm:px-6 lg:pb-12">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -145,7 +147,7 @@ export default function MenuPage() {
           {customerContext.mode === 'table' ? t('menu.subtitleDesk', { place: desk ? loc(desk.name) : t('ctx.restaurant') }) : t('menu.subtitle')}
         </p>
 
-        <ContextBar onRequests={() => setCategory('requests')} onSignIn={() => setSignInOpen(true)} />
+        <ContextBar onRequests={() => setCategory('requests')} onSignIn={openGuestLogin} />
 
         <div className="relative mt-4">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600 dark:text-slate-400" aria-hidden />
@@ -229,7 +231,7 @@ export default function MenuPage() {
 
       {/* Phone cart bar: item count and subtotal, always one tap away */}
       {cartCount > 0 && !cartOpen && (
-        <div className="fixed inset-x-0 bottom-0 z-30 p-3 lg:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-30 px-3 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
           <button
             type="button"
             onClick={() => setCartOpen(true)}
@@ -244,8 +246,7 @@ export default function MenuPage() {
         </div>
       )}
 
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onSignIn={() => setSignInOpen(true)} />
-      <GuestLogin open={signInOpen} onClose={() => setSignInOpen(false)} />
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onSignIn={openGuestLogin} />
     </div>
   );
 }

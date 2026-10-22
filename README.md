@@ -11,7 +11,7 @@ npm run dev
 
 | Side | URL | Who | Sign-in |
 |---|---|---|---|
-| Customer | `/login`, `/menu` | In-house hotel guests, and walk-in visitors at desk / table QRs | Guests: room + last name + 4-digit PIN. Visitors: name only (desk QR required) |
+| Customer | `/login`, `/menu` | In-house hotel guests, and walk-in visitors at desk / table QRs | Guests: room + first name + 4-digit PIN. Visitors: name only (desk QR required) |
 | Staff | `/staff/login`, `/staff/dashboard` | Kitchen, front desk | Username + password |
 | Admin | `/admin` | Administrators | Username + password |
 
@@ -26,7 +26,7 @@ The first screen (`/login`) makes the choice explicit, and the scanned QR pre-se
 | | **I'm staying at the hotel** | **I'm ordering at a table or venue** |
 |---|---|---|
 | Typical QR | Room QR `/menu?room=304` | Table / venue QR `/menu?desk=table-3`, `?desk=pool` |
-| Sign-in | Room number, last name, room PIN | Name only (no room, no PIN) |
+| Sign-in | Room number, first name, room PIN | Name only (no room, no PIN) |
 | Menu | Room-service menu | Menu of that restaurant or venue |
 | After sign-in | Room requests: towels, housekeeping, maintenance, wake-up call | Table requests: call a waiter, bill, clear table, assistance. **No room-only services** |
 | Order goes to | The guest's room | The scanned table or venue (name kept, e.g. *Restaurant · Table 3*) |
@@ -47,7 +47,7 @@ a notice on customer, staff and admin pages, "Demo order" wording at checkout an
   A guest can only order to their own room (a mismatching QR shows a warning).
 - Desk / table QR: `/menu?desk=pool` (also `lobby`, `spa`, `terrace`, and one per restaurant
   table: `table-1` ... `table-6`). On the login page there are two tabs:
-  - **Hotel guest**: room + last name + PIN. After signing in they choose to have the order
+  - **Hotel guest**: room + first name + PIN. After signing in they choose to have the order
     brought to the desk or to their room. It is billed to their room folio, or paid online.
   - **Visitor** (walk-in, not staying): name only. They order, **pay online**, and are served at
     that desk. No room folio. Visitor sessions expire after 4 hours.
@@ -68,7 +68,7 @@ a notice on customer, staff and admin pages, "Demo order" wording at checkout an
 
 ## Demo accounts
 
-Guests (Room / last name / PIN): `304 / Bekele / 4821` (more are listed on the login page).
+Guests (Room / first name / PIN): `304 / Abebe / 4821` (more are listed on the login page).
 
 Visitor flow: open `/menu?desk=table-4`, choose the **Visitor** tab, enter any name, order and pay online,
 then use *Call a waiter*. Open `/staff/login` (frontdesk) in another tab to see the order and the request.

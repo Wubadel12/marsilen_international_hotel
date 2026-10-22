@@ -5,7 +5,7 @@ import { DESKS_BY_ID, ROLES, seedStaff, seedStays } from '../data/accounts';
 
 /**
  * Two separate sessions:
- *  - guest: an in-house stay, signed in with room + last name + PIN
+ *  - guest: an in-house stay, signed in with room + first name + PIN
  *  - staff: kitchen / front desk / admin, signed in with username + password
  *
  * DEMO ONLY: all of this lives in the browser. Use real server-side auth in production.
@@ -75,13 +75,13 @@ export function AuthProvider({ children }) {
 
   /* ---------- guest ---------- */
   const guestLogin = useCallback(
-    ({ room, lastName, pin }) => {
+    ({ room, firstName, pin }) => {
       const r = String(room).trim().toUpperCase();
       const stay = stays.find(
         (s) =>
           s.status === 'in-house' &&
           s.room.toUpperCase() === r &&
-          norm(s.lastName) === norm(lastName) &&
+          norm(s.firstName) === norm(firstName) &&
           s.pin === String(pin).trim(),
       );
       // Same result for "no such room" and "wrong PIN" so nothing is revealed.

@@ -55,7 +55,7 @@ export default function StaffLogin() {
     'mt-1.5 min-h-[46px] w-full rounded-xl border border-slate-300 bg-white px-3.5 text-base dark:border-white/15 dark:bg-navy-900';
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <Header mode="public" />
       <main id="main" tabIndex={-1} className="mx-auto flex max-w-md flex-col px-4 py-10 outline-none">
         <form onSubmit={onSubmit} className="card space-y-5 p-6 shadow-lift" noValidate>

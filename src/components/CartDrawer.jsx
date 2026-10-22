@@ -10,7 +10,6 @@ import { CURRENCIES, DIETARY_REQUIREMENTS, TAX_RATE, TIP_OPTIONS } from '../data
 import { calcTotals } from '../data/pricing';
 import QuantityStepper from './QuantityStepper';
 import { DemoNotice, SourceBadge, inputCls } from './ui';
-import GuestLogin from '../pages/GuestLogin';
 
 const METHODS = [
   { id: 'card', key: 'cart.methodCard' },
@@ -61,7 +60,7 @@ function ChoiceChip({ name, checked, onChange, children }) {
   );
 }
 
-export default function CartDrawer({ open, onClose }) {
+export default function CartDrawer({ open, onClose, onSignIn }) {
   const {
     t, loc, cartLines, subtotalEtb, setQty, setNote, currency, setCurrency,
     money, fmt, placeOrder,
@@ -72,7 +71,6 @@ export default function CartDrawer({ open, onClose }) {
   const isRoomFlow = customerContext.mode === 'room';
   const isTableFlow = !isRoomFlow;
   const room = guest?.room;
-  const [guestSignInOpen, setGuestSignInOpen] = useState(false);
   const [customerName, setCustomerName] = useState('');
   const [selectedDeskId, setSelectedDeskId] = useState('');
   const placeDesk = desk ?? DESKS_BY_ID[selectedDeskId] ?? null;
@@ -90,6 +88,7 @@ export default function CartDrawer({ open, onClose }) {
   const [placed, setPlaced] = useState(null);
   const panelRef = useRef(null);
   const sendTimer = useRef(null);
+  const closeRef = useRef(null);
 
   const effPayment = payment;
   const effDelivery = isRoomFlow ? 'room' : needsDeliveryChoice ? delivery : 'here';
@@ -118,18 +117,20 @@ export default function CartDrawer({ open, onClose }) {
       }, 350);
     }
   }, [onClose, phase]);
+  closeRef.current = close;
 
   // Scroll lock, Escape to close, focus trap, restore focus on close.
   useEffect(() => {
     if (!open) return undefined;
     const previouslyFocused = document.activeElement;
+    const previousScroll = { x: window.scrollX, y: window.scrollY };
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const raf = requestAnimationFrame(() => panelRef.current?.focus());
 
     const onKey = (e) => {
       if (e.key === 'Escape') {
-        close();
+        closeRef.current?.();
         return;
       }
       if (e.key !== 'Tab' || !panelRef.current) return;
@@ -150,9 +151,10 @@ export default function CartDrawer({ open, onClose }) {
       cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
-      previouslyFocused?.focus?.();
+      previouslyFocused?.focus?.({ preventScroll: true });
+      window.scrollTo(previousScroll.x, previousScroll.y);
     };
-  }, [open, close]);
+  }, [open]);
 
   useEffect(() => () => clearTimeout(sendTimer.current), []);
 
@@ -216,7 +218,7 @@ export default function CartDrawer({ open, onClose }) {
         aria-modal="true"
         aria-labelledby="cart-title"
         {...(!open ? { inert: '' } : {})}
-        className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-surface shadow-2xl outline-none transition-[transform,visibility] duration-300 ease-out dark:bg-ink ${
+        className={`absolute right-0 top-0 flex h-dvh w-full max-w-md flex-col bg-surface shadow-2xl outline-none transition-[transform,visibility] duration-300 ease-out dark:bg-ink ${
           open ? 'visible translate-x-0' : 'invisible translate-x-full'
         }`}
       >
@@ -324,7 +326,7 @@ export default function CartDrawer({ open, onClose }) {
                 {isRoomFlow && !guest && (
                   <div className="rounded-xl border border-amber-500/50 bg-amber-50 p-3 text-sm dark:bg-amber-500/10">
                     <p>{t('cart.signInRequired')}</p>
-                    <button type="button" className="mt-2 font-bold text-brand underline underline-offset-2" onClick={() => setGuestSignInOpen(true)}>{t('login.submit')}</button>
+                    <button type="button" className="mt-2 font-bold text-brand underline underline-offset-2" onClick={onSignIn}>{t('login.submit')}</button>
                   </div>
                 )}
 
@@ -546,7 +548,7 @@ export default function CartDrawer({ open, onClose }) {
               </dl>
             </div>
 
-            <div className="space-y-2 border-t border-slate-200 bg-white/90 p-4 backdrop-blur dark:border-white/10 dark:bg-navy-900/90">
+            <div className="space-y-2 border-t border-slate-200 bg-white/90 px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur dark:border-white/10 dark:bg-navy-900/90">
               <DemoNotice scope="checkout" />
               {missing.length > 0 && (
                 <p role="status" className="text-sm font-semibold text-amber-900 dark:text-amber-200">
@@ -560,7 +562,6 @@ export default function CartDrawer({ open, onClose }) {
           </>
         )}
       </aside>
-      <GuestLogin open={guestSignInOpen} onClose={() => setGuestSignInOpen(false)} />
     </div>
   );
 }

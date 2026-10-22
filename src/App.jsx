@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { RequireStaff } from './components/guards';
 import MenuPage from './pages/MenuPage';
 import StaffLogin from './pages/StaffLogin';
+import GuestLogin from './pages/GuestLogin';
 import StaffDashboard from './pages/StaffDashboard';
 import AdminPage from './pages/AdminPage';
 import Toaster from './components/Toaster';
@@ -21,6 +22,7 @@ export default function App() {
         <Routes>
           {/* Customer side */}
           <Route path="/menu" element={<MenuPage />} />
+          <Route path="/login" element={<GuestLogin />} />
 
           {/* Staff side (separate login, separate pages) */}
           <Route path="/staff/login" element={<StaffLogin />} />

@@ -6,6 +6,7 @@
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
     scroll-padding-top: 8rem; /* sticky header + category bar */
+    scrollbar-gutter: stable;
   }
   body {
     @apply bg-surface text-navy-900 antialiased dark:bg-ink dark:text-slate-100;

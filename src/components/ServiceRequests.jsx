@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AlarmClock, BedDouble, Bath, BellRing, Check, HandHelping, Receipt, UtensilsCrossed, Wrench } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
@@ -6,13 +7,14 @@ import { useDesk } from '../hooks/useDesk';
 import { DESKS, DESKS_BY_ID } from '../data/accounts';
 import { SERVICES } from '../data/mock';
 import { inputCls } from './ui';
-import GuestLogin from '../pages/GuestLogin';
 
 const ICONS = { Bath, BedDouble, Wrench, AlarmClock, BellRing, Receipt, UtensilsCrossed, HandHelping };
 
 export default function ServiceRequests() {
   const { t, loc, requestService, customerContext } = useApp();
   const { guest } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const desk = useDesk();
   const roomFlow = customerContext.mode === 'room';
   const scope = roomFlow ? 'room' : 'desk';
@@ -21,7 +23,6 @@ export default function ServiceRequests() {
   const [chosenDeskId, setChosenDeskId] = useState('');
   const [sent, setSent] = useState({});
   const [wakeTime, setWakeTime] = useState('06:30');
-  const [signInOpen, setSignInOpen] = useState(false);
   const timers = useRef([]);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
@@ -52,7 +53,7 @@ export default function ServiceRequests() {
         {!guest && roomFlow && (
           <div className="mt-4 rounded-xl border border-amber-500/50 bg-amber-50 p-4 text-sm dark:bg-amber-500/10">
             <p>{t('cart.signInRequired')}</p>
-            <button type="button" className="mt-2 font-bold text-brand underline underline-offset-2" onClick={() => setSignInOpen(true)}>{t('login.submit')}</button>
+            <button type="button" className="mt-2 font-bold text-brand underline underline-offset-2" onClick={() => navigate({ pathname: '/login', search: location.search })}>{t('login.submit')}</button>
           </div>
         )}
         {!guest && !roomFlow && (
@@ -81,7 +82,6 @@ export default function ServiceRequests() {
           })}
         </ul>
       </section>
-      <GuestLogin open={signInOpen} onClose={() => setSignInOpen(false)} />
     </>
   );
 }
