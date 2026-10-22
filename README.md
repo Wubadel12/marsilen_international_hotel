@@ -1,4 +1,4 @@
-# Aurora Grand Hotel: Dining & Service Portal (frontend demo)
+# Marsilen International Hotel: Dining & Service Portal (frontend demo)
 
 React 18 + Vite + Tailwind CSS + Lucide + React Router + qrcode.react.
 

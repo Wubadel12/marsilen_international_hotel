@@ -2,7 +2,7 @@
 // Prices are stored in ETB (hotel base currency) and converted at display time.
 
 export const HOTEL = {
-  name: { en: 'Aurora Grand Hotel', am: 'አውሮራ ግራንድ ሆቴል' },
+  name: { en: 'Marsilen International Hotel', am: 'ማርሲሌን ኢንተርናሽናል ሆቴል' },
 };
 
 export const TAX_RATE = 0.15; // Ethiopian VAT (demo)
