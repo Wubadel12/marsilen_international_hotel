@@ -1,0 +1,87 @@
+@import 'tailwindcss';
+@config '../tailwind.config.js';
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    scroll-padding-top: 8rem; /* sticky header + category bar */
+  }
+  body {
+    @apply bg-surface text-navy-900 antialiased dark:bg-ink dark:text-slate-100;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  /* Ethiopic script needs a little more line height to avoid clipped glyphs. */
+  html[lang='am'] body {
+    line-height: 1.65;
+  }
+  /* Visible focus with >= 3:1 contrast on both themes. */
+  :focus-visible {
+    outline: 3px solid #b45309;
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  .dark :focus-visible {
+    outline-color: #fbbf24;
+  }
+  ::selection {
+    background: rgba(245, 158, 11, 0.3);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/50 bg-white/80 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-900/80;
+  }
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-soft dark:border-white/10 dark:bg-navy-800;
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  /* amber-700 / white = 5.0:1 (the old gold gradient was 3.2:1, below AA for small text). */
+  .btn-gold {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 bg-gradient-to-b from-amber-700 to-amber-800 text-white shadow-md shadow-amber-900/20 hover:brightness-110;
+  }
+  .btn-ghost {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 border border-slate-300 bg-white text-navy-900 hover:bg-slate-50 dark:border-white/15 dark:bg-navy-800 dark:text-slate-100 dark:hover:bg-white/5;
+  }
+  .btn-danger {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 bg-red-700 text-white hover:bg-red-800;
+  }
+  .chip {
+    @apply inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 text-sm font-medium transition duration-200;
+  }
+  .chip-off {
+    @apply border-slate-300 bg-white text-slate-700 hover:border-amber-600 dark:border-white/15 dark:bg-navy-800 dark:text-slate-200;
+  }
+  .chip-on {
+    @apply border-transparent bg-navy-900 text-white shadow-md dark:bg-amber-400 dark:text-navy-900;
+  }
+  /* Accessible brand-coloured text (gold #D97706 on white is only 3.2:1). */
+  .text-brand {
+    @apply text-amber-700 dark:text-amber-400;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
